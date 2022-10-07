@@ -1,0 +1,5 @@
+/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles/socketcan.dir
+/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles/usbcan.dir
+/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles/usbcan2socketcan.dir
+/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles/edit_cache.dir
+/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles/rebuild_cache.dir

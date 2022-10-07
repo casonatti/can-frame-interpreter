@@ -1,0 +1,2 @@
+/usr/bin/ar qc libusbcan.a CMakeFiles/usbcan.dir/src/usbcan.cpp.o
+/usr/bin/ranlib libusbcan.a
