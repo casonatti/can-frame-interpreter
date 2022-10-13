@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/frameInterpreter.dir/src/frameInterpreter.cpp.o -o frameInterpreter  libsocketcan.a libmotor.a libmotor_commands.a -lpthread 

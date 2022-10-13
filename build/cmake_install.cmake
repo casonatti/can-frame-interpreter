@@ -1,4 +1,4 @@
-# Install script for directory: /home/jeison/instor/repositories/USB-CAN-2-SocketCAN
+# Install script for directory: /home/jeison/instor/repositories/can-frame-interpreter
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/jeison/instor/repositories/can-frame-interpreter/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

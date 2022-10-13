@@ -120,6 +120,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/socketcan.dir/DependInfo.cmake"
-  "CMakeFiles/usbcan.dir/DependInfo.cmake"
-  "CMakeFiles/usbcan2socketcan.dir/DependInfo.cmake"
+  "CMakeFiles/motor.dir/DependInfo.cmake"
+  "CMakeFiles/motor_commands.dir/DependInfo.cmake"
+  "CMakeFiles/frameInterpreter.dir/DependInfo.cmake"
   )

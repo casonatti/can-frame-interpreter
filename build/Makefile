@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jeison/instor/repositories/USB-CAN-2-SocketCAN
+CMAKE_SOURCE_DIR = /home/jeison/instor/repositories/can-frame-interpreter
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build
+CMAKE_BINARY_DIR = /home/jeison/instor/repositories/can-frame-interpreter/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles /home/jeison/instor/repositories/can-frame-interpreter/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -130,30 +130,115 @@ socketcan/fast:
 .PHONY : socketcan/fast
 
 #=============================================================================
-# Target rules for targets named usbcan
+# Target rules for targets named motor
 
 # Build rule for target.
-usbcan: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 usbcan
-.PHONY : usbcan
+motor: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 motor
+.PHONY : motor
 
 # fast build rule for target.
-usbcan/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan.dir/build.make CMakeFiles/usbcan.dir/build
-.PHONY : usbcan/fast
+motor/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor.dir/build.make CMakeFiles/motor.dir/build
+.PHONY : motor/fast
 
 #=============================================================================
-# Target rules for targets named usbcan2socketcan
+# Target rules for targets named motor_commands
 
 # Build rule for target.
-usbcan2socketcan: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 usbcan2socketcan
-.PHONY : usbcan2socketcan
+motor_commands: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 motor_commands
+.PHONY : motor_commands
 
 # fast build rule for target.
-usbcan2socketcan/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan2socketcan.dir/build.make CMakeFiles/usbcan2socketcan.dir/build
-.PHONY : usbcan2socketcan/fast
+motor_commands/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor_commands.dir/build.make CMakeFiles/motor_commands.dir/build
+.PHONY : motor_commands/fast
+
+#=============================================================================
+# Target rules for targets named frameInterpreter
+
+# Build rule for target.
+frameInterpreter: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 frameInterpreter
+.PHONY : frameInterpreter
+
+# fast build rule for target.
+frameInterpreter/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frameInterpreter.dir/build.make CMakeFiles/frameInterpreter.dir/build
+.PHONY : frameInterpreter/fast
+
+src/frameInterpreter.o: src/frameInterpreter.cpp.o
+.PHONY : src/frameInterpreter.o
+
+# target to build an object file
+src/frameInterpreter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frameInterpreter.dir/build.make CMakeFiles/frameInterpreter.dir/src/frameInterpreter.cpp.o
+.PHONY : src/frameInterpreter.cpp.o
+
+src/frameInterpreter.i: src/frameInterpreter.cpp.i
+.PHONY : src/frameInterpreter.i
+
+# target to preprocess a source file
+src/frameInterpreter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frameInterpreter.dir/build.make CMakeFiles/frameInterpreter.dir/src/frameInterpreter.cpp.i
+.PHONY : src/frameInterpreter.cpp.i
+
+src/frameInterpreter.s: src/frameInterpreter.cpp.s
+.PHONY : src/frameInterpreter.s
+
+# target to generate assembly for a file
+src/frameInterpreter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frameInterpreter.dir/build.make CMakeFiles/frameInterpreter.dir/src/frameInterpreter.cpp.s
+.PHONY : src/frameInterpreter.cpp.s
+
+src/motor.o: src/motor.cpp.o
+.PHONY : src/motor.o
+
+# target to build an object file
+src/motor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor.dir/build.make CMakeFiles/motor.dir/src/motor.cpp.o
+.PHONY : src/motor.cpp.o
+
+src/motor.i: src/motor.cpp.i
+.PHONY : src/motor.i
+
+# target to preprocess a source file
+src/motor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor.dir/build.make CMakeFiles/motor.dir/src/motor.cpp.i
+.PHONY : src/motor.cpp.i
+
+src/motor.s: src/motor.cpp.s
+.PHONY : src/motor.s
+
+# target to generate assembly for a file
+src/motor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor.dir/build.make CMakeFiles/motor.dir/src/motor.cpp.s
+.PHONY : src/motor.cpp.s
+
+src/motor_commands.o: src/motor_commands.cpp.o
+.PHONY : src/motor_commands.o
+
+# target to build an object file
+src/motor_commands.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor_commands.dir/build.make CMakeFiles/motor_commands.dir/src/motor_commands.cpp.o
+.PHONY : src/motor_commands.cpp.o
+
+src/motor_commands.i: src/motor_commands.cpp.i
+.PHONY : src/motor_commands.i
+
+# target to preprocess a source file
+src/motor_commands.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor_commands.dir/build.make CMakeFiles/motor_commands.dir/src/motor_commands.cpp.i
+.PHONY : src/motor_commands.cpp.i
+
+src/motor_commands.s: src/motor_commands.cpp.s
+.PHONY : src/motor_commands.s
+
+# target to generate assembly for a file
+src/motor_commands.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor_commands.dir/build.make CMakeFiles/motor_commands.dir/src/motor_commands.cpp.s
+.PHONY : src/motor_commands.cpp.s
 
 src/socketcan.o: src/socketcan.cpp.o
 .PHONY : src/socketcan.o
@@ -179,54 +264,6 @@ src/socketcan.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/socketcan.dir/build.make CMakeFiles/socketcan.dir/src/socketcan.cpp.s
 .PHONY : src/socketcan.cpp.s
 
-src/usbcan.o: src/usbcan.cpp.o
-.PHONY : src/usbcan.o
-
-# target to build an object file
-src/usbcan.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan.dir/build.make CMakeFiles/usbcan.dir/src/usbcan.cpp.o
-.PHONY : src/usbcan.cpp.o
-
-src/usbcan.i: src/usbcan.cpp.i
-.PHONY : src/usbcan.i
-
-# target to preprocess a source file
-src/usbcan.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan.dir/build.make CMakeFiles/usbcan.dir/src/usbcan.cpp.i
-.PHONY : src/usbcan.cpp.i
-
-src/usbcan.s: src/usbcan.cpp.s
-.PHONY : src/usbcan.s
-
-# target to generate assembly for a file
-src/usbcan.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan.dir/build.make CMakeFiles/usbcan.dir/src/usbcan.cpp.s
-.PHONY : src/usbcan.cpp.s
-
-src/usbcan2socketcan.o: src/usbcan2socketcan.cpp.o
-.PHONY : src/usbcan2socketcan.o
-
-# target to build an object file
-src/usbcan2socketcan.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan2socketcan.dir/build.make CMakeFiles/usbcan2socketcan.dir/src/usbcan2socketcan.cpp.o
-.PHONY : src/usbcan2socketcan.cpp.o
-
-src/usbcan2socketcan.i: src/usbcan2socketcan.cpp.i
-.PHONY : src/usbcan2socketcan.i
-
-# target to preprocess a source file
-src/usbcan2socketcan.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan2socketcan.dir/build.make CMakeFiles/usbcan2socketcan.dir/src/usbcan2socketcan.cpp.i
-.PHONY : src/usbcan2socketcan.cpp.i
-
-src/usbcan2socketcan.s: src/usbcan2socketcan.cpp.s
-.PHONY : src/usbcan2socketcan.s
-
-# target to generate assembly for a file
-src/usbcan2socketcan.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan2socketcan.dir/build.make CMakeFiles/usbcan2socketcan.dir/src/usbcan2socketcan.cpp.s
-.PHONY : src/usbcan2socketcan.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -235,18 +272,22 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... frameInterpreter"
+	@echo "... motor"
+	@echo "... motor_commands"
 	@echo "... socketcan"
-	@echo "... usbcan"
-	@echo "... usbcan2socketcan"
+	@echo "... src/frameInterpreter.o"
+	@echo "... src/frameInterpreter.i"
+	@echo "... src/frameInterpreter.s"
+	@echo "... src/motor.o"
+	@echo "... src/motor.i"
+	@echo "... src/motor.s"
+	@echo "... src/motor_commands.o"
+	@echo "... src/motor_commands.i"
+	@echo "... src/motor_commands.s"
 	@echo "... src/socketcan.o"
 	@echo "... src/socketcan.i"
 	@echo "... src/socketcan.s"
-	@echo "... src/usbcan.o"
-	@echo "... src/usbcan.i"
-	@echo "... src/usbcan.s"
-	@echo "... src/usbcan2socketcan.o"
-	@echo "... src/usbcan2socketcan.i"
-	@echo "... src/usbcan2socketcan.s"
 .PHONY : help
 
 

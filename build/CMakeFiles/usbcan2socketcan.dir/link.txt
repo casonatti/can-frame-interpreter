@@ -1,1 +1,0 @@
-/usr/bin/c++ -rdynamic CMakeFiles/usbcan2socketcan.dir/src/usbcan2socketcan.cpp.o -o usbcan2socketcan   -L/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/lib  -Wl,-rpath,/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/lib libsocketcan.a libusbcan.a ../lib/libusbcan.so -lpthread 

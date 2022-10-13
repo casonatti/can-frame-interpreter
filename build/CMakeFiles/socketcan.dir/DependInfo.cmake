@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/src/socketcan.cpp" "CMakeFiles/socketcan.dir/src/socketcan.cpp.o" "gcc" "CMakeFiles/socketcan.dir/src/socketcan.cpp.o.d"
+  "/home/jeison/instor/repositories/can-frame-interpreter/src/socketcan.cpp" "CMakeFiles/socketcan.dir/src/socketcan.cpp.o" "gcc" "CMakeFiles/socketcan.dir/src/socketcan.cpp.o.d"
   )
 
 # Targets to which this target links.

@@ -1,5 +1,5 @@
 CMakeFiles/socketcan.dir/src/socketcan.cpp.o: \
- /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/src/socketcan.cpp \
+ /home/jeison/instor/repositories/can-frame-interpreter/src/socketcan.cpp \
  /usr/include/stdc-predef.h /usr/include/unistd.h /usr/include/features.h \
  /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
@@ -19,7 +19,7 @@ CMakeFiles/socketcan.dir/src/socketcan.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
  /usr/include/linux/close_range.h \
- /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/include/usb_can_2_socketcan/socketcan.h \
+ /home/jeison/instor/repositories/can-frame-interpreter/include/socketcan.h \
  /usr/include/linux/can.h /usr/include/linux/types.h \
  /usr/include/x86_64-linux-gnu/asm/types.h \
  /usr/include/asm-generic/types.h /usr/include/asm-generic/int-ll64.h \

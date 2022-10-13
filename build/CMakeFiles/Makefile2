@@ -54,18 +54,19 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jeison/instor/repositories/USB-CAN-2-SocketCAN
+CMAKE_SOURCE_DIR = /home/jeison/instor/repositories/can-frame-interpreter
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build
+CMAKE_BINARY_DIR = /home/jeison/instor/repositories/can-frame-interpreter/build
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
 all: CMakeFiles/socketcan.dir/all
-all: CMakeFiles/usbcan.dir/all
-all: CMakeFiles/usbcan2socketcan.dir/all
+all: CMakeFiles/motor.dir/all
+all: CMakeFiles/motor_commands.dir/all
+all: CMakeFiles/frameInterpreter.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -74,8 +75,9 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/socketcan.dir/clean
-clean: CMakeFiles/usbcan.dir/clean
-clean: CMakeFiles/usbcan2socketcan.dir/clean
+clean: CMakeFiles/motor.dir/clean
+clean: CMakeFiles/motor_commands.dir/clean
+clean: CMakeFiles/frameInterpreter.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -85,14 +87,14 @@ clean: CMakeFiles/usbcan2socketcan.dir/clean
 CMakeFiles/socketcan.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/socketcan.dir/build.make CMakeFiles/socketcan.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/socketcan.dir/build.make CMakeFiles/socketcan.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles --progress-num=1,2 "Built target socketcan"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles --progress-num=7,8 "Built target socketcan"
 .PHONY : CMakeFiles/socketcan.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/socketcan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/socketcan.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 0
 .PHONY : CMakeFiles/socketcan.dir/rule
 
 # Convenience name for target.
@@ -105,57 +107,84 @@ CMakeFiles/socketcan.dir/clean:
 .PHONY : CMakeFiles/socketcan.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/usbcan.dir
+# Target rules for target CMakeFiles/motor.dir
 
 # All Build rule for target.
-CMakeFiles/usbcan.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan.dir/build.make CMakeFiles/usbcan.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan.dir/build.make CMakeFiles/usbcan.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles --progress-num=3,4 "Built target usbcan"
-.PHONY : CMakeFiles/usbcan.dir/all
+CMakeFiles/motor.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor.dir/build.make CMakeFiles/motor.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor.dir/build.make CMakeFiles/motor.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles --progress-num=3,4 "Built target motor"
+.PHONY : CMakeFiles/motor.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/usbcan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/usbcan.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles 0
-.PHONY : CMakeFiles/usbcan.dir/rule
+CMakeFiles/motor.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/motor.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 0
+.PHONY : CMakeFiles/motor.dir/rule
 
 # Convenience name for target.
-usbcan: CMakeFiles/usbcan.dir/rule
-.PHONY : usbcan
+motor: CMakeFiles/motor.dir/rule
+.PHONY : motor
 
 # clean rule for target.
-CMakeFiles/usbcan.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan.dir/build.make CMakeFiles/usbcan.dir/clean
-.PHONY : CMakeFiles/usbcan.dir/clean
+CMakeFiles/motor.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor.dir/build.make CMakeFiles/motor.dir/clean
+.PHONY : CMakeFiles/motor.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/usbcan2socketcan.dir
+# Target rules for target CMakeFiles/motor_commands.dir
 
 # All Build rule for target.
-CMakeFiles/usbcan2socketcan.dir/all: CMakeFiles/usbcan.dir/all
-CMakeFiles/usbcan2socketcan.dir/all: CMakeFiles/socketcan.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan2socketcan.dir/build.make CMakeFiles/usbcan2socketcan.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan2socketcan.dir/build.make CMakeFiles/usbcan2socketcan.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles --progress-num=5,6 "Built target usbcan2socketcan"
-.PHONY : CMakeFiles/usbcan2socketcan.dir/all
+CMakeFiles/motor_commands.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor_commands.dir/build.make CMakeFiles/motor_commands.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor_commands.dir/build.make CMakeFiles/motor_commands.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles --progress-num=5,6 "Built target motor_commands"
+.PHONY : CMakeFiles/motor_commands.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/usbcan2socketcan.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles 6
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/usbcan2socketcan.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/USB-CAN-2-SocketCAN/build/CMakeFiles 0
-.PHONY : CMakeFiles/usbcan2socketcan.dir/rule
+CMakeFiles/motor_commands.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/motor_commands.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 0
+.PHONY : CMakeFiles/motor_commands.dir/rule
 
 # Convenience name for target.
-usbcan2socketcan: CMakeFiles/usbcan2socketcan.dir/rule
-.PHONY : usbcan2socketcan
+motor_commands: CMakeFiles/motor_commands.dir/rule
+.PHONY : motor_commands
 
 # clean rule for target.
-CMakeFiles/usbcan2socketcan.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/usbcan2socketcan.dir/build.make CMakeFiles/usbcan2socketcan.dir/clean
-.PHONY : CMakeFiles/usbcan2socketcan.dir/clean
+CMakeFiles/motor_commands.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/motor_commands.dir/build.make CMakeFiles/motor_commands.dir/clean
+.PHONY : CMakeFiles/motor_commands.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/frameInterpreter.dir
+
+# All Build rule for target.
+CMakeFiles/frameInterpreter.dir/all: CMakeFiles/motor.dir/all
+CMakeFiles/frameInterpreter.dir/all: CMakeFiles/socketcan.dir/all
+CMakeFiles/frameInterpreter.dir/all: CMakeFiles/motor_commands.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frameInterpreter.dir/build.make CMakeFiles/frameInterpreter.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frameInterpreter.dir/build.make CMakeFiles/frameInterpreter.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles --progress-num=1,2 "Built target frameInterpreter"
+.PHONY : CMakeFiles/frameInterpreter.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/frameInterpreter.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 8
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/frameInterpreter.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jeison/instor/repositories/can-frame-interpreter/build/CMakeFiles 0
+.PHONY : CMakeFiles/frameInterpreter.dir/rule
+
+# Convenience name for target.
+frameInterpreter: CMakeFiles/frameInterpreter.dir/rule
+.PHONY : frameInterpreter
+
+# clean rule for target.
+CMakeFiles/frameInterpreter.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/frameInterpreter.dir/build.make CMakeFiles/frameInterpreter.dir/clean
+.PHONY : CMakeFiles/frameInterpreter.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
