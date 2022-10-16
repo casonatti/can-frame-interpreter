@@ -1,12 +1,5 @@
-#include <cstring>
-#include <iostream>
 #include <frameInterpreter.h>
-#include <list>
-#include <motor.h>
-#include <stdio.h>
-#include <socketcan.h>
-#include <string>
-#include <thread>
+
 
 #include <unistd.h> //sleep test
 
@@ -32,30 +25,32 @@ void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::list<motor:
             printf("RTR = 0 [false]\n");
         memcpy(message.data, recv_frame.data, message.len);
 
-        //TODO: Debug (Apagar depois)
-        printf("***************************************************\n");
-        printf("Message ID: %x\n", message.can_id);
-        printf("Message length: %x\n", message.len);
-        printf("Message: ");
-        for(int i = 0; i < message.len; i++)
-            printf("%x ", message.data[i]);
         
-
         //interpret the frames
         //TODO: preciso do protocolo pra fazer essa parte
 
+        //checksum
+        //TODO: implementar
+
         //select the frames and dispatch
-        if(checkAndSend(message, motor_list) != FrameInterpreterError::OK)
-            printf("\nEnvio NÃO OK!"); //TODO: tratar esse erro!
-        
-        printf("\n***************************************************\n\n");
+        //if(checkAndSend(message, motor_list) != FrameInterpreterError::OK)
+        //    printf("Envio NÃO OK!\n"); //TODO: tratar esse erro!
     }
+}
+
+void SendFrame(bool &stop, socketcan::SocketCan &socket_can) {
+    socketcan::SocketCanFrame send_frame;
+    can_frame message;
+
+    motorInterface::MotorInterface::readFromInterface();
+
+    motorInterface::MotorInterface::writeToSocketcan(socket_can, message);
 }
 
 FrameInterpreterError checkAndSend(can_frame frame, std::list<motor::Motor> motor_list) {
     for(motor::Motor &it : motor_list) {
         if(frame.can_id == it.getID()) {
-            if(it.readFrame(frame) == motor::MotorError::OK)
+            if(it.readFromSocketcan(frame) >= 0)
                 return FrameInterpreterError::OK;
             else
                 return FrameInterpreterError::SEND_ERROR;
@@ -72,11 +67,8 @@ int main(int , char *[]) {
 
     std::list<motor::Motor> motor_list;
 
-    motor::Motor m1(0x140);
-    motor::Motor m2(0x141);
-
-    m1.setName("Motor 1");
-    m2.setName("Motor 2");
+    motor::Motor m1(0x141, "0");
+    motor::Motor m2(0x142, "1");
 
     motor_list.push_back(m1);
     motor_list.push_back(m2);
@@ -86,8 +78,10 @@ int main(int , char *[]) {
     bool stop_all;
 
     std::thread receive_thread(frameInterpreter::ReceiveFrame, std::ref(stop_all), std::ref(socket_can), std::ref(motor_list));
+    std::thread send_thread(frameInterpreter::SendFrame, std::ref(stop_all), std::ref(socket_can));
 
     receive_thread.join();
+    send_thread.join();
 
     return 0;
 }

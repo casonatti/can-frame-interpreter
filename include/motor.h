@@ -1,55 +1,34 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include <chrono>
-#include <cstring>
 #include <iostream>
-#include <socketcan.h>
-#include <string>
-#include "motor_commands.h"
+#include <joint.h>
 
 namespace motor {
-
-enum MotorError {
-    OK,
-    SEND_ERROR,
-    RECEIVE_ERROR
-};
 
 enum State {
     NOT_INITIALIZED,
     INITIALIZED
 };
 
-struct _joint {
-    time_t timestamp;
-    std::string name;
-    _Float64 position;
-    _Float64 velocity;
-    _Float64 effort;
-};
-
 class Motor {
     private:
         unsigned int id;
-        _joint joint;
         std::string name;
+        joint::Joint joint;
         State state;
 
     public:
-        Motor(unsigned int id);
-        ~Motor();
-        MotorError writeFrame();
-        MotorError readFrame(can_frame frame);
-        MotorError writeInterface();
-        MotorError readInterface(double cmd[]);
+        //constructor and destructor
+        Motor::Motor(unsigned int id, std::string name);
+        Motor::~Motor();
+
+        //getters and setters
         unsigned int getID();
-        void setJoint(std::string name, _Float64 position, _Float64 velocity, _Float64 effort);
-        _joint getJoint();
         void setName(std::string name);
         std::string getName();
 };
 
-} //namespace frameinterpreter
+}
 
 #endif //MOTOR_H

@@ -1,8 +1,14 @@
 #ifndef FRAME_INTERPRETER_H
 #define FRAME_INTERPRETER_H
-#include <list>
+#include <cstring>
 #include <iostream>
-#include "motor.h"
+#include <list>
+#include <motor.h>
+#include <motorInterface.h>
+#include <stdio.h>
+#include <socketcan.h>
+#include <string>
+#include <thread>
 
 namespace frameInterpreter {
 
