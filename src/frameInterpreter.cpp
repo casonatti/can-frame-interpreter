@@ -42,21 +42,22 @@ void SendFrame(bool &stop, socketcan::SocketCan &socket_can) {
     socketcan::SocketCanFrame send_frame;
     can_frame message;
 
-    motorInterface::MotorInterface::readFromInterface();
+    //motorInterface::MotorInterface::readFromInterface();
 
     motorInterface::MotorInterface::writeToSocketcan(socket_can, message);
 }
 
 FrameInterpreterError checkAndSend(can_frame frame, std::list<motor::Motor> motor_list) {
-    for(motor::Motor &it : motor_list) {
-        if(frame.can_id == it.getID()) {
-            if(it.readFromSocketcan(frame) >= 0)
-                return FrameInterpreterError::OK;
-            else
-                return FrameInterpreterError::SEND_ERROR;
-        }
-    }
-    return FrameInterpreterError::MOTOR_DOES_NOT_EXIST;
+    //for(motor::Motor &it : motor_list) {
+    //    if(frame.can_id == it.getID()) {
+    //        if(it.readFromSocketcan(frame) >= 0)
+    //            return FrameInterpreterError::OK;
+    //        else
+    //            return FrameInterpreterError::SEND_ERROR;
+    //    }
+    //}
+    //return FrameInterpreterError::MOTOR_DOES_NOT_EXIST;
+    return FrameInterpreterError::OK;
 }
 
 } //namespace frameInterpreter

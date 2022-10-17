@@ -16,12 +16,19 @@ message(STATUS "Timeout value is set to ${RESPONSE_TIMEOUT} ms")
 set(SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/src CACHE INTERNAL "")
 set(INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include CACHE INTERNAL "")
 
-set(HEADER_FILES ${INCLUDE_DIR}/socketcan.h ${INCLUDE_DIR}/motor.h ${INCLUDE_DIR}/motor_commands.h)
+set(HEADER_FILES ${INCLUDE_DIR}/socketcan.h ${INCLUDE_DIR}/motor.h ${INCLUDE_DIR}/motorInterface.h 
+                    ${INCLUDE_DIR}/joint.h ${INCLUDE_DIR}/interface.h ${INCLUDE_DIR}/motor_commands.h)
 add_library(socketcan ${SRC_DIR}/socketcan.cpp ${HEADER_FILES})
 target_include_directories(socketcan PRIVATE ${INCLUDE_DIR})
 
 add_library(motor ${SRC_DIR}/motor.cpp ${HEADER_FILES})
 target_include_directories(motor PRIVATE ${INCLUDE_DIR})
+
+add_library(motorInterface ${SRC_DIR}/motorInterface.cpp ${HEADER_FILES})
+target_include_directories(motorInterface PRIVATE ${INCLUDE_DIR})
+
+add_library(joint ${SRC_DIR}/joint.cpp ${HEADER_FILES})
+target_include_directories(joint PRIVATE ${INCLUDE_DIR})
 
 add_library(motor_commands ${SRC_DIR}/motor_commands.cpp ${HEADER_FILES})
 target_include_directories(motor_commands PRIVATE ${INCLUDE_DIR})

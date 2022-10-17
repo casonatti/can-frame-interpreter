@@ -20,8 +20,8 @@ class Motor {
 
     public:
         //constructor and destructor
-        Motor::Motor(unsigned int id, std::string name);
-        Motor::~Motor();
+        Motor(unsigned int id, std::string name);
+        ~Motor();
 
         //getters and setters
         unsigned int getID();

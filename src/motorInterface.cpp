@@ -29,7 +29,6 @@ namespace motorInterface {
 
     int MotorInterface::readFromInterface(double cmd[], int type) {
         //receive commands from the ROS interface
-        can_frame result;
         int x = -1;
         double result;
 
