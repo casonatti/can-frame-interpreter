@@ -35,4 +35,4 @@ target_include_directories(motor_commands PRIVATE ${INCLUDE_DIR})
 
 add_executable(frameInterpreter ${SRC_DIR}/frameInterpreter.cpp ${HEADER_FILES})
 target_include_directories(frameInterpreter PRIVATE ${INCLUDE_DIR})
-target_link_libraries(frameInterpreter socketcan motor motor_commands pthread)
+target_link_libraries(frameInterpreter socketcan motor motor_commands motorInterface joint pthread)

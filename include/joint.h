@@ -15,6 +15,11 @@ class Joint {
         double effort;
     public:
         void setJoint(std::string name, double position, double velocity, double effort);
+        void setName(std::string name);
+        void setEffort(double effort);
+        void setPosition(double position);
+        void setVelocity(double velocity);
+
         std::string getName();
         double getPosition();
         double getVelocity();

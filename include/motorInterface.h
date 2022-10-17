@@ -6,7 +6,9 @@
 #include <iostream>
 #include <socketcan.h>
 #include <string>
+#include <motor.h>
 #include <motor_commands.h>
+#include <vector>
 
 namespace motorInterface {
 
@@ -26,8 +28,10 @@ enum MotorOperationType {
     EFFORT
 };
 
-class MotorInterface : public Interface {
+class MotorInterface /*: public Interface */ {
     private:
+        bool motor_interface_send_flag = false;
+        double cmd[2];
 
     public:
         //constuctor and destructor
@@ -35,15 +39,17 @@ class MotorInterface : public Interface {
         ~MotorInterface();
         
         //convertion
-        uint64_t doubleToUint8Converter(double value);
-        double uint8ToDoubleConverter(uint8_t value[]);
+        void doubleToFrameDataConverter(double value, uint8_t frame_data[]);
+        double frameDataToDoubleConverter(uint8_t value[]);
 
         //operation
         int checkWhichMotor(can_frame frame);
-        double readFromSocketcan(can_frame frame);  //receive a new frame from socketcan
-        static int readFromInterface(double cmd[], int type);    //receive a new value and operation type from ROS interface
-        static MotorError writeToSocketcan(socketcan::SocketCan &socketcan, can_frame frame);      //send a frame to socketcan
-        int writeToInterface(unsigned int motor_id, double current_state, int type);   //send joint current state to ROS interface
+        MotorError readFromSocketcan(can_frame frame, std::vector<motor::Motor> &motor);  //receive a new frame from socketcan
+        MotorError readFromInterface(double cmd[]);    //receive a new value and operation type from ROS interface
+        MotorError writeToSocketcan(can_frame &frame_cmd_m0, can_frame &frame_cmd_m1);   //send a frame to socketcan
+        int writeToInterface(double current_state[]);   //send joint current state to ROS interface
+        void setSendFrameFlag(bool flag_state);
+        bool getSendFrameFlag();
 };
 
 } //namespace motorInterface

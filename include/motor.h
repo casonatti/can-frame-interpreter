@@ -24,9 +24,17 @@ class Motor {
         ~Motor();
 
         //getters and setters
-        unsigned int getID();
         void setName(std::string name);
+        void setJoint(std::string name, double position, double velocity, double effort);
+        void setVelocity(double velocity);
+
+        unsigned int getID();
         std::string getName();
+        std::string getJointName();
+        joint::Joint getJoint();
+        double getJointEffort();
+        double getJointPosition();
+        double getJointVelocity();
 };
 
 }

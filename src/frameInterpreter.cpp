@@ -5,7 +5,8 @@
 
 namespace frameInterpreter {
 
-void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::list<motor::Motor> &motor_list) {
+void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::vector<motor::Motor> &motor_vector) {
+    motorInterface::MotorInterface motor_interface;
     socketcan::SocketCanFrame recv_frame;
     can_frame message;
 
@@ -25,39 +26,51 @@ void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::list<motor:
             printf("RTR = 0 [false]\n");
         memcpy(message.data, recv_frame.data, message.len);
 
-        
         //interpret the frames
         //TODO: preciso do protocolo pra fazer essa parte
 
         //checksum
         //TODO: implementar
 
-        //select the frames and dispatch
-        //if(checkAndSend(message, motor_list) != FrameInterpreterError::OK)
-        //    printf("Envio NÃO OK!\n"); //TODO: tratar esse erro!
+        //update motor value
+        motor_interface.readFromSocketcan(message, motor_vector);
     }
 }
 
 void SendFrame(bool &stop, socketcan::SocketCan &socket_can) {
-    socketcan::SocketCanFrame send_frame;
-    can_frame message;
+    motorInterface::MotorInterface motor_interface;
+    socketcan::SocketCanFrame send_frame_cmd_0, send_frame_cmd_1;
+    can_frame message_m0, message_m1;
+    int send_cnt = -1;
 
-    //motorInterface::MotorInterface::readFromInterface();
+    while(!stop) {
+        while(!motor_interface.getSendFrameFlag()); //do nothing
+        
+        motor_interface.writeToSocketcan(message_m0, message_m1);
 
-    motorInterface::MotorInterface::writeToSocketcan(socket_can, message);
+        send_frame_cmd_0.can_id = 0x141;
+        send_frame_cmd_0.len = message_m0.len;
+
+        while(send_cnt < 0) {
+            send_cnt = socket_can.Write(send_frame_cmd_0, 1);
+        }
+
+        send_frame_cmd_1.can_id = 0x142;
+        send_frame_cmd_1.len = message_m1.len;
+
+        send_cnt = -1;
+        while(send_cnt < 0) {
+            send_cnt = socket_can.Write(send_frame_cmd_1, 1); 
+        }
+    }
 }
 
-FrameInterpreterError checkAndSend(can_frame frame, std::list<motor::Motor> motor_list) {
-    //for(motor::Motor &it : motor_list) {
-    //    if(frame.can_id == it.getID()) {
-    //        if(it.readFromSocketcan(frame) >= 0)
-    //            return FrameInterpreterError::OK;
-    //        else
-    //            return FrameInterpreterError::SEND_ERROR;
-    //    }
-    //}
-    //return FrameInterpreterError::MOTOR_DOES_NOT_EXIST;
-    return FrameInterpreterError::OK;
+void ReceiveFromRos() {
+
+}
+
+void SendToRos() {
+
 }
 
 } //namespace frameInterpreter
@@ -66,23 +79,28 @@ FrameInterpreterError checkAndSend(can_frame frame, std::list<motor::Motor> moto
 int main(int , char *[]) {
     socketcan::SocketCan socket_can;
 
-    std::list<motor::Motor> motor_list;
+    std::vector<motor::Motor> motor_vector;
 
     motor::Motor m1(0x141, "0");
     motor::Motor m2(0x142, "1");
 
-    motor_list.push_back(m1);
-    motor_list.push_back(m2);
+    motor_vector.push_back(m1);
+    motor_vector.push_back(m2);
 
     if (socket_can.Open(SOCKETCAN_INTERFACE, RESPONSE_TIMEOUT) != socketcan::SocketCanError::OK) return 0;
 
     bool stop_all;
 
-    std::thread receive_thread(frameInterpreter::ReceiveFrame, std::ref(stop_all), std::ref(socket_can), std::ref(motor_list));
+    std::thread receive_thread(frameInterpreter::ReceiveFrame, std::ref(stop_all), std::ref(socket_can), std::ref(motor_vector));
     std::thread send_thread(frameInterpreter::SendFrame, std::ref(stop_all), std::ref(socket_can));
+
+    std::thread receive_from_ros_thread(frameInterpreter::ReceiveFromRos);
+    std::thread send_to_ros_thread(frameInterpreter::SendToRos);
 
     receive_thread.join();
     send_thread.join();
+    receive_from_ros_thread.join();
+    send_to_ros_thread.join();
 
     return 0;
 }

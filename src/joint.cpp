@@ -10,6 +10,22 @@ namespace joint {
         this->effort = effort;
     }
 
+    void Joint::setName(std::string name) {
+        this->name = name;
+    }
+
+    void Joint::setEffort(double effort) {
+        this->effort = effort;
+    }
+
+    void Joint::setPosition(double position) {
+        this->position = position;
+    }
+
+    void Joint::setVelocity(double velocity) {
+        this->velocity = velocity;
+    }
+
     std::string Joint::getName() {
         return this->name;
     }
