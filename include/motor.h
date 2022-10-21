@@ -17,6 +17,7 @@ class Motor {
         std::string name;
         joint::Joint joint;
         State state;
+        bool motor_data_updated = false;
 
     public:
         //constructor and destructor
@@ -26,6 +27,7 @@ class Motor {
         //getters and setters
         void setName(std::string name);
         void setJoint(std::string name, double position, double velocity, double effort);
+        void setState(State state);
         void setVelocity(double velocity);
 
         unsigned int getID();
@@ -35,6 +37,10 @@ class Motor {
         double getJointEffort();
         double getJointPosition();
         double getJointVelocity();
+        State getstate();
+
+        void setMotorDataUpdatedFlag(bool flag_state);
+        bool getMotorDataUpdatedFlag();
 };
 
 }

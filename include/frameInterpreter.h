@@ -2,13 +2,14 @@
 #define FRAME_INTERPRETER_H
 #include <cstring>
 #include <iostream>
-#include <list>
 #include <motor.h>
 #include <motorInterface.h>
+#include <mutex>
 #include <stdio.h>
 #include <socketcan.h>
 #include <string>
 #include <thread>
+#include <vector>
 
 namespace frameInterpreter {
 
@@ -19,8 +20,13 @@ enum FrameInterpreterError {
     MOTOR_DOES_NOT_EXIST
 };
 
-void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::list<motor::Motor> &motor_list);
-FrameInterpreterError checkAndSend(can_frame frame, std::list<motor::Motor> motor_list);
+void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::vector<motor::Motor> &motor_vector, motorInterface::MotorInterface &motor_interface);
+void SendFrame(bool &stop, socketcan::SocketCan &socket_can, motorInterface::MotorInterface &motor_interface, std::vector<motor::Motor> &motor_vector);
+
+void ReceiveFromRos(bool &stop, motorInterface::MotorInterface &motor_interface);
+void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface);
+
+void TestRosInterface(motorInterface::MotorInterface &motor_interface);
 
 }
 
