@@ -26,7 +26,8 @@ enum MotorError {
     SEND_TO_MOTOR_ERROR,
     RECEIVE_FROM_ROS_ERROR,
     RECEIVE_FROM_MOTOR_ERROR,
-    MOTOR_DOES_NOT_EXIST
+    MOTOR_DOES_NOT_EXIST,
+    INVALID_COMMAND
 };
 
 enum MotorOperationType {
@@ -45,7 +46,7 @@ class MotorInterface /*: public Interface */ {
 
         //convertion methods
         void doubleToFrameDataConverter(double value, uint8_t frame_data[]);
-        void frameDataToDoubleConverter(uint8_t frame_data[], double result[]);
+        MotorError frameDataToDoubleConverter(uint8_t frame_data[], double result[]);
 
     public:
         //constuctor and destructor
@@ -53,7 +54,7 @@ class MotorInterface /*: public Interface */ {
         ~MotorInterface();
 
         //operation
-        MotorError initialize(std::vector<motor::Motor> motor_vector, socketcan::SocketCan &socket_can);
+        MotorError initialize(std::vector<motor::Motor> &motor_vector, socketcan::SocketCan &socket_can);
         int checkWhichMotor(can_frame frame);
         MotorError readFromSocketcan(can_frame frame, std::vector<motor::Motor> &motor);  //receive a new frame from socketcan
         MotorError readFromInterface(double cmd[]);    //receive a new value and operation type from ROS interface
@@ -66,6 +67,7 @@ class MotorInterface /*: public Interface */ {
         bool getNewCommandsFlag();
         void setSendFrameFlag(bool flag_state);
         bool getSendFrameFlag();
+        void setDoubleResponse(double value, int n);
         double getDoubleResponse(int n);
         void setMotorDataFlagToFalse(std::vector<motor::Motor> &motor_vector);
 };

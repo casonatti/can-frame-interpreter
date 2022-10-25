@@ -10,6 +10,11 @@ namespace joint {
         this->effort = effort;
     }
 
+    void Joint::setTimestamp() {
+        std::chrono::system_clock::time_point timestamp = std::chrono::system_clock::now();
+        this->timestamp = std::chrono::system_clock::to_time_t(timestamp);
+    }
+
     void Joint::setName(std::string name) {
         this->name = name;
     }

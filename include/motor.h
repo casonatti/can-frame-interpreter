@@ -28,16 +28,20 @@ class Motor {
         void setName(std::string name);
         void setJoint(std::string name, double position, double velocity, double effort);
         void setState(State state);
+        void setTimestamp();
+        void setEffort(double effort);
+        void setPosition(double position);
         void setVelocity(double velocity);
 
         unsigned int getID();
         std::string getName();
         std::string getJointName();
         joint::Joint getJoint();
+        
         double getJointEffort();
         double getJointPosition();
         double getJointVelocity();
-        State getstate();
+        State getState();
 
         void setMotorDataUpdatedFlag(bool flag_state);
         bool getMotorDataUpdatedFlag();

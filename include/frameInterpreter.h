@@ -24,7 +24,7 @@ void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::vector<moto
 void SendFrame(bool &stop, socketcan::SocketCan &socket_can, motorInterface::MotorInterface &motor_interface, std::vector<motor::Motor> &motor_vector);
 
 void ReceiveFromRos(bool &stop, motorInterface::MotorInterface &motor_interface);
-void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface);
+void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std::vector<motor::Motor> &motor_vector);
 
 void TestRosInterface(motorInterface::MotorInterface &motor_interface);
 
