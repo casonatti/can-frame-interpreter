@@ -5,6 +5,7 @@
 #include <interface.h>
 #include <iomanip>
 #include <iostream>
+#include <map>
 #include <math.h>
 #include <motor.h>
 #include <motor_commands.h>
@@ -13,8 +14,6 @@
 #include <stdlib.h>
 #include <string>
 #include <vector>
-
-#define DPS_PER_LSB 0.01
 
 namespace motorInterface {
 
@@ -43,22 +42,17 @@ class MotorInterface /*: public Interface */ {
                 data_to_ros_flag = false;
 
         double cmd[2], response[2];
-
-        //convertion methods
-        void doubleToFrameDataConverter(double value, uint8_t frame_data[]);
-        MotorError frameDataToDoubleConverter(uint8_t frame_data[], double result[]);
-
+        
     public:
         //constuctor and destructor
         MotorInterface();
         ~MotorInterface();
 
         //operation
-        MotorError initialize(std::vector<motor::Motor> &motor_vector, socketcan::SocketCan &socket_can);
-        int checkWhichMotor(can_frame frame);
-        MotorError readFromSocketcan(can_frame frame, std::vector<motor::Motor> &motor);  //receive a new frame from socketcan
+        MotorError initialize(std::map<canid_t, motor::Motor> &motor_map, socketcan::SocketCan &socket_can);
+        MotorError readFromSocketcan(can_frame frame, std::map<canid_t, motor::Motor> &motor_map);  //receive a new frame from socketcan
         MotorError readFromInterface(double cmd[]);    //receive a new value and operation type from ROS interface
-        MotorError writeToSocketcan(can_frame &frame_cmd_m0, can_frame &frame_cmd_m1);   //send a frame to socketcan
+        MotorError writeToSocketcan(std::vector<can_frame> &frame_vector);   //send a frame to socketcan
         MotorError writeToInterface(double current_state[]);   //send joint current state to ROS interface
         
         void setDataToRosFlag(bool flag_state);
@@ -69,7 +63,7 @@ class MotorInterface /*: public Interface */ {
         bool getSendFrameFlag();
         void setDoubleResponse(double value, int n);
         double getDoubleResponse(int n);
-        void setMotorDataFlagToFalse(std::vector<motor::Motor> &motor_vector);
+        void setMotorDataFlagToFalse(std::map<canid_t, motor::Motor> &motor_map);
 };
 
 } //namespace motorInterface
