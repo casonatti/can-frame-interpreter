@@ -24,6 +24,7 @@ class Motor {
         joint::Joint joint;
         State state;
         bool motor_data_updated = false;
+        double command;
 
     public:
         //constructor and destructor
@@ -37,6 +38,7 @@ class Motor {
         void setEffort(double effort);
         void setPosition(double position);
         void setVelocity(double velocity);
+        void setCommand(double cmd);
         unsigned int getID();
         std::string getName();
         std::string getJointName();
@@ -47,6 +49,7 @@ class Motor {
         State getState();
         void setMotorDataUpdatedFlag(bool flag_state);
         bool getMotorDataUpdatedFlag();
+        double getCommand();
 
         //operational
         int frameDataToDoubleConverter(uint8_t frame_data[]);

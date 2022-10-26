@@ -40,6 +40,10 @@ namespace motor {
         this->joint.setEffort(effort);
     }
 
+    void Motor::setCommand(double cmd) {
+        this->command = cmd;
+    }
+
     std::string Motor::getName() {
         return this->name;
     }
@@ -78,6 +82,10 @@ namespace motor {
         return this->state;
     }
 
+    double Motor::getCommand() {
+        return this->command;
+    }
+
     int Motor::frameDataToDoubleConverter(uint8_t frame_data[]) {
         uint8_t temperature_data, torque_data[2], speed_data[2], encoder_data[2];
         double result[4];
@@ -112,14 +120,14 @@ namespace motor {
             return 1;
         }
 
-        return -1;
+        return 0;
     }
 
     void Motor::doubleToFrameDataConverter(double value, uint8_t frame_data[]) {
         char data[32] = {0};
         int result_int = -1;
 
-        result_int = (int) (value / DPS_PER_LSB);
+        result_int = (int) (value);/* / DPS_PER_LSB); */
         
         //convert int to char[] in hex
         snprintf(data, sizeof(data), "%X", result_int);

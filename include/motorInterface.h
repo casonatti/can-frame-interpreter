@@ -26,7 +26,9 @@ enum MotorError {
     RECEIVE_FROM_ROS_ERROR,
     RECEIVE_FROM_MOTOR_ERROR,
     MOTOR_DOES_NOT_EXIST,
-    INVALID_COMMAND
+    INVALID_COMMAND,
+    UNABLE_TO_GET_NEW_COMMANDS,
+    CONVERTION_ERROR
 };
 
 enum MotorOperationType {
@@ -49,11 +51,11 @@ class MotorInterface /*: public Interface */ {
         ~MotorInterface();
 
         //operation
-        MotorError initialize(std::map<canid_t, motor::Motor> &motor_map, socketcan::SocketCan &socket_can);
-        MotorError readFromSocketcan(can_frame frame, std::map<canid_t, motor::Motor> &motor_map);  //receive a new frame from socketcan
-        MotorError readFromInterface(double cmd[]);    //receive a new value and operation type from ROS interface
-        MotorError writeToSocketcan(std::vector<can_frame> &frame_vector);   //send a frame to socketcan
-        MotorError writeToInterface(double current_state[]);   //send joint current state to ROS interface
+        MotorError initialize(std::map<unsigned int, motor::Motor> &motor_map, socketcan::SocketCan &socket_can);
+        MotorError readFromInterface(double cmd[], std::map<canid_t, motor::Motor> &motor_map);    //receive a new value and operation type from ROS interface
+        MotorError writeToInterface(std::map<canid_t, motor::Motor> motor_map);   //send joint current state to ROS interface
+        MotorError produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map);  //receive a new frame from socketcan
+        MotorError produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map);   //send a frame to socketcan
         
         void setDataToRosFlag(bool flag_state);
         bool getDataToRosFlag();
@@ -63,7 +65,7 @@ class MotorInterface /*: public Interface */ {
         bool getSendFrameFlag();
         void setDoubleResponse(double value, int n);
         double getDoubleResponse(int n);
-        void setMotorDataFlagToFalse(std::map<canid_t, motor::Motor> &motor_map);
+        void setMotorDataFlagToFalse(std::map<unsigned int, motor::Motor> &motor_map);
 };
 
 } //namespace motorInterface

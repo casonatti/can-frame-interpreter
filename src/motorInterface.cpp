@@ -6,7 +6,7 @@ namespace motorInterface {
 
     MotorInterface::~MotorInterface() {};
 
-    MotorError MotorInterface::initialize(std::map<canid_t, motor::Motor> &motor_map, socketcan::SocketCan &socket_can) {
+    MotorError MotorInterface::initialize(std::map<unsigned int, motor::Motor> &motor_map, socketcan::SocketCan &socket_can) {
         can_frame frame;
 
         frame.data[0] = 0x88;
@@ -25,7 +25,7 @@ namespace motorInterface {
         
             //TODO: melhorar isso... tem que esperar a resposta do motor!
             if(socket_can.Write(frame, 1) != socketcan::SocketCanError::OK) {
-                printf("Error on initializing motor. [ID 0x%x", frame.can_id);
+                printf("Error on initializing motor. [ID 0x%x]", frame.can_id);
                 return MotorError::COULD_NOT_INITIALIZE;
             }
 
@@ -37,29 +37,61 @@ namespace motorInterface {
         return MotorError::OK;
     }
 
-    MotorError MotorInterface::readFromSocketcan(can_frame frame, std::map<canid_t, motor::Motor> &motor_map) {
-        //receiving frames from socketcan 
-        motor_map.find(frame.can_id)->second.frameDataToDoubleConverter(frame.data);
-        
-        return MotorError::OK;
-    }
-
-    MotorError MotorInterface::readFromInterface(double cmd[]) {
+    MotorError MotorInterface::readFromInterface(double cmd[], std::map<canid_t, motor::Motor> &motor_map) {
         //receive commands from ROS interface
-        this->cmd[0] = cmd[0];
-        this->cmd[1] = cmd[1];
+        if(this->getNewCommandsFlag())
+            return MotorError::UNABLE_TO_GET_NEW_COMMANDS;
+
+        int i = 0;
+        for(auto &it : motor_map) {
+            it.second.setCommand(cmd[i]);
+            i++;
+        }
 
         this->setNewCommandsFlag(true);
+        this->setSendFrameFlag(true);
 
         return MotorError::OK;
     }
 
-    MotorError MotorInterface::writeToSocketcan(std::vector<can_frame> &frame_vector) {
-        uint8_t frame_data[8] = {0};
-        double cmd[2];
+    MotorError MotorInterface::writeToInterface(std::map<canid_t, motor::Motor> motor_map) {
+        //send motor current status to the ROS interface
+        
+        int size = (int) motor_map.size();
 
-        cmd[0] = this->cmd[0];
-        cmd[1] = this->cmd[1];
+        joint::Joint joints[size];
+
+        int i=0;
+        for(auto &it : motor_map) {
+            joints[i] = it.second.getJoint();
+            i++;
+            printf("Joint velocity = %g\n", it.second.getJointVelocity());
+        }
+
+        return MotorError::OK;
+    }
+
+    MotorError MotorInterface::produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map) {
+        //receiving frames from socketcan 
+        if(motor_map.find(frame.can_id)->second.frameDataToDoubleConverter(frame.data)) {
+            motor_map.find(frame.can_id)->second.setMotorDataUpdatedFlag(true);
+            return MotorError::OK;
+        }
+        
+        return MotorError::CONVERTION_ERROR;
+    }
+
+    MotorError MotorInterface::produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map) {
+        uint8_t frame_data[8] = {0};
+        double cmd[motor_map.size()];
+
+        //fill cmd[] with each motor command
+        int i = 0;
+        for(auto &it : motor_map) {
+            frame_vector[i].can_id = it.second.getID();
+            cmd[i] = it.second.getCommand();
+            i++;
+        }
 
         int size = (int) frame_vector.size();
 
@@ -77,13 +109,6 @@ namespace motorInterface {
 
             frame_vector[i].len = 8;
         }
-
-        return MotorError::OK;
-    }
-
-    MotorError MotorInterface::writeToInterface(double current_state[]) {
-        //send motor current status to the ROS interface
-        //como fazer??
 
         return MotorError::OK;
     }
@@ -120,7 +145,7 @@ namespace motorInterface {
         return this->response[n];
     }
 
-    void MotorInterface::setMotorDataFlagToFalse(std::map<canid_t, motor::Motor> &motor_map) {
+    void MotorInterface::setMotorDataFlagToFalse(std::map<unsigned int, motor::Motor> &motor_map) {
         for(auto &it : motor_map)
             it.second.setMotorDataUpdatedFlag(false);
     }
