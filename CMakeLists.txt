@@ -17,7 +17,7 @@ set(SRC_DIR ${CMAKE_CURRENT_LIST_DIR}/src CACHE INTERNAL "")
 set(INCLUDE_DIR ${CMAKE_CURRENT_LIST_DIR}/include CACHE INTERNAL "")
 
 set(HEADER_FILES ${INCLUDE_DIR}/socketcan.h ${INCLUDE_DIR}/motor.h ${INCLUDE_DIR}/motorInterface.h 
-                    ${INCLUDE_DIR}/joint.h ${INCLUDE_DIR}/interface.h ${INCLUDE_DIR}/motor_commands.h)
+                    ${INCLUDE_DIR}/joint.h ${INCLUDE_DIR}/motor_commands.h)
 add_library(socketcan ${SRC_DIR}/socketcan.cpp ${HEADER_FILES})
 target_include_directories(socketcan PRIVATE ${INCLUDE_DIR})
 

@@ -18,8 +18,8 @@ namespace motorInterface {
         frame.data[6] = 0x00;
         frame.data[7] = 0x00;
 
-        frame.len = 8;
-        
+        frame.can_dlc = 8;
+    
         for(auto &it : motor_map) {
             frame.can_id = it.second.getID();
         
@@ -48,40 +48,39 @@ namespace motorInterface {
             i++;
         }
 
-        this->setNewCommandsFlag(true);
-        this->setSendFrameFlag(true);
+        this->setNewCommandsFlag(true); //will protect the program from overplacing commands
+        this->setSendFrameFlag(true);   //enable the program to send frames to the motors
 
         return MotorError::OK;
     }
 
-    MotorError MotorInterface::writeToInterface(std::map<canid_t, motor::Motor> motor_map) {
+    std::vector<joint::Joint> MotorInterface::writeToInterface(std::map<canid_t, motor::Motor> motor_map) {
         //send motor current status to the ROS interface
         
         int size = (int) motor_map.size();
 
-        joint::Joint joints[size];
+        //joint::Joint joints[size];
+        std::vector<joint::Joint> joints;
+        joints.resize(size);
 
         int i=0;
         for(auto &it : motor_map) {
             joints[i] = it.second.getJoint();
             i++;
-            printf("Joint velocity = %g\n", it.second.getJointVelocity());
+            //printf("Joint[%d] velocity = %g\n", i, it.second.getJointVelocity());
         }
 
-        return MotorError::OK;
+        return joints;
     }
 
-    MotorError MotorInterface::produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map) {
+    void MotorInterface::produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map) {
         //receiving frames from socketcan 
         if(motor_map.find(frame.can_id)->second.frameDataToDoubleConverter(frame.data)) {
             motor_map.find(frame.can_id)->second.setMotorDataUpdatedFlag(true);
-            return MotorError::OK;
         }
-        
-        return MotorError::CONVERTION_ERROR;
     }
 
-    MotorError MotorInterface::produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map) {
+    void MotorInterface::produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map) {
         uint8_t frame_data[8] = {0};
         double cmd[motor_map.size()];
 
@@ -107,10 +106,8 @@ namespace motorInterface {
                 frame_vector[i].data[j] = 0x00;
             }
 
-            frame_vector[i].len = 8;
+            frame_vector[i].can_dlc = 8;
         }
-
-        return MotorError::OK;
     }
 
     void MotorInterface::setDataToRosFlag(bool flag_state) {

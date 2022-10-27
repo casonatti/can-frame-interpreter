@@ -2,7 +2,6 @@
 #define MOTOR_INTERFACE_H
 
 #include <cstring>
-#include <interface.h>
 #include <iomanip>
 #include <iostream>
 #include <map>
@@ -37,7 +36,7 @@ enum MotorOperationType {
     EFFORT
 };
 
-class MotorInterface /*: public Interface */ {
+class MotorInterface {
     private:
         bool motor_interface_send_flag = false,
                 new_commands_flag = false,
@@ -53,9 +52,9 @@ class MotorInterface /*: public Interface */ {
         //operation
         MotorError initialize(std::map<unsigned int, motor::Motor> &motor_map, socketcan::SocketCan &socket_can);
         MotorError readFromInterface(double cmd[], std::map<canid_t, motor::Motor> &motor_map);    //receive a new value and operation type from ROS interface
-        MotorError writeToInterface(std::map<canid_t, motor::Motor> motor_map);   //send joint current state to ROS interface
-        MotorError produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map);  //receive a new frame from socketcan
-        MotorError produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map);   //send a frame to socketcan
+        std::vector<joint::Joint> writeToInterface(std::map<canid_t, motor::Motor> motor_map);   //send joint current state to ROS interface
+        void produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map);  //receive a new frame from socketcan
+        void produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map);   //send a frame to socketcan
         
         void setDataToRosFlag(bool flag_state);
         bool getDataToRosFlag();

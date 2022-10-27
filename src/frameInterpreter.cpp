@@ -6,9 +6,6 @@ using namespace std::chrono_literals;
 
 namespace frameInterpreter {
 
-std::mutex send_mtx, operating_mtx;
-std::condition_variable cv;
-
 void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::map<unsigned int, motor::Motor> &motor_map, motorInterface::MotorInterface &motor_interface) {
     socketcan::SocketCanFrame recv_frame;
     can_frame message;
@@ -22,25 +19,28 @@ void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::map<unsigne
        
         //receive frame
         message.can_id = recv_frame.can_id & CAN_EFF_MASK;
-        message.len = recv_frame.can_dlc;
+        message.can_dlc = recv_frame.can_dlc;
 
         //check rtr flag
         if(recv_frame.can_id & CAN_RTR_FLAG)
             message.can_id |= CAN_RTR_FLAG;
         else
-            memcpy(message.data, recv_frame.data, message.len);
-
-        //interpret the frames
-        //TODO: preciso do protocolo pra fazer essa parte
+            memcpy(message.data, recv_frame.data, message.can_dlc);
 
         //checksum
-        //TODO: implementar
+        //TODO: preciso do protocolo pra implementar
 
         //update motor value
         motor_interface.produceDouble(message, motor_map);
 
         //check if all motors have it's velocity calculated
-        if(motor_map.at(0x141).getMotorDataUpdatedFlag() && motor_map.at(0x142).getMotorDataUpdatedFlag()) {
+        int motor_data_ok = 0;
+        int size = (int) motor_map.size();
+        for(auto &it : motor_map)
+            if(it.second.getMotorDataUpdatedFlag())
+                motor_data_ok++;
+        
+        if(motor_data_ok == size) {
             motor_interface.setDataToRosFlag(true);
         }
     }
@@ -60,7 +60,6 @@ void SendFrame(bool &stop, socketcan::SocketCan &socket_can, motorInterface::Mot
     while(!stop) {
         if(!motor_interface.getSendFrameFlag()) continue;
 
-        send_mtx.lock();
         motor_interface.setSendFrameFlag(false);
         
         //convert commands to frames
@@ -73,46 +72,38 @@ void SendFrame(bool &stop, socketcan::SocketCan &socket_can, motorInterface::Mot
                 send_cnt = socket_can.Write(frame_vector[i], 1);
 
             //TODO: Debug (simula a resposta do motor)
-            std::stringstream ss, id_hex;
+            /* std::stringstream ss, id_hex;
             ss << std::hex << std::setfill('0');
             id_hex << std::hex << frame_vector[i].can_id;
             for (int i = 0; i < 8; i++) {
                 ss << std::hex << std::setw(2) << static_cast<int>(frame_vector[0].data[i]);
             }
             std::string str_send = "cansend can0 " + id_hex.str() + "#" + ss.str();
-            system(str_send.c_str());
+            system(str_send.c_str()); */
 
             send_cnt = -1;
         }
-
-        //TODO: criar uma condição específica pra isso
-        while(!motor_interface.getDataToRosFlag()); //do nothing
-
-        motor_interface.setMotorDataFlagToFalse(motor_map);
-
-        send_mtx.unlock();
     }
 }
 
 void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std::map<unsigned int, motor::Motor> &motor_map) {
     while(!stop) {
         if(!motor_interface.getDataToRosFlag()) continue;
-        //send to ROS --- como?
-        send_mtx.lock();
+        //send to ROS
 
         motor_interface.setDataToRosFlag(false);
 
-        motor_interface.writeToInterface(motor_map);
+        motor_interface.writeToInterface(motor_map);    //send joints to ros interface
 
-        send_mtx.unlock();
-        operating_mtx.unlock();
-        motor_interface.setNewCommandsFlag(false);
+        motor_interface.setMotorDataFlagToFalse(motor_map); //set motor data updated flags of all motors to false
+
+        motor_interface.setNewCommandsFlag(false);  //enable the program to receive new commands
     }
 }
 
-void TestRosInterface(motorInterface::MotorInterface &motor_interface, std::map<canid_t, motor::Motor> &motor_map) {
+/* void TestRosInterface(motorInterface::MotorInterface &motor_interface, std::map<canid_t, motor::Motor> &motor_map) {
     double cmd[2];
-    auto d1 = 5ms;
+    auto d1 = 10ms;
     sleep(1);
 
     printf("Enviei o pacote 1...\n");
@@ -120,7 +111,6 @@ void TestRosInterface(motorInterface::MotorInterface &motor_interface, std::map<
     cmd[0] = 2;
     cmd[1] = 1;
 
-    operating_mtx.lock();
     while(motor_interface.readFromInterface(cmd, motor_map) == motorInterface::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
         printf("WARNING: calculating last commands!\n");
         std::this_thread::sleep_for(d1);
@@ -133,7 +123,6 @@ void TestRosInterface(motorInterface::MotorInterface &motor_interface, std::map<
     cmd[0] = 1;
     cmd[1] = 2;
 
-    operating_mtx.lock();
     while(motor_interface.readFromInterface(cmd, motor_map) == motorInterface::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
         printf("WARNING: calculating last commands!\n");
         std::this_thread::sleep_for(d1);
@@ -146,12 +135,11 @@ void TestRosInterface(motorInterface::MotorInterface &motor_interface, std::map<
     cmd[0] = 2;
     cmd[1] = 2;
 
-    operating_mtx.lock();
     while(motor_interface.readFromInterface(cmd, motor_map) == motorInterface::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
         printf("WARNING: calculating last commands!\n");
         std::this_thread::sleep_for(d1);
     }
-}
+} */
 
 } //namespace frameInterpreter
 
@@ -162,9 +150,12 @@ int main(int , char *[]) {
 
     motor::Motor m1(0x141, "0");
     motor::Motor m2(0x142, "1");
+    
 
     motor_map.insert(std::pair<unsigned int, motor::Motor>(0x141, m1));
     motor_map.insert(std::pair<unsigned int, motor::Motor>(0x142, m2));
+    
+    
 
     if (socket_can.Open(SOCKETCAN_INTERFACE, RESPONSE_TIMEOUT) != socketcan::SocketCanError::OK) return 0;
 
@@ -178,15 +169,13 @@ int main(int , char *[]) {
     std::thread receive_thread(frameInterpreter::ReceiveFrame, std::ref(stop_all), std::ref(socket_can), std::ref(motor_map), std::ref(motor_interface));
     std::thread send_thread(frameInterpreter::SendFrame, std::ref(stop_all), std::ref(socket_can), std::ref(motor_interface), std::ref(motor_map));
 
-    //std::thread receive_from_ros_thread(frameInterpreter::ReceiveFromRos, std::ref(stop_all), std::ref(motor_interface));
     std::thread send_to_ros_thread(frameInterpreter::SendToRos, std::ref(stop_all), std::ref(motor_interface), std::ref(motor_map));
 
-    std::thread ros_interface_test_thread(frameInterpreter::TestRosInterface, std::ref(motor_interface), std::ref(motor_map));
-    ros_interface_test_thread.join();
+    //std::thread ros_interface_test_thread(frameInterpreter::TestRosInterface, std::ref(motor_interface), std::ref(motor_map));
+    //ros_interface_test_thread.join();
 
     receive_thread.join();
     send_thread.join();
-    //receive_from_ros_thread.join();
     send_to_ros_thread.join();
 
     return 0;
