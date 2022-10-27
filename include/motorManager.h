@@ -14,7 +14,7 @@
 #include <string>
 #include <vector>
 
-namespace motorInterface {
+namespace motorManager {
 
 enum MotorError {
     OK,
@@ -36,7 +36,7 @@ enum MotorOperationType {
     EFFORT
 };
 
-class MotorInterface {
+class MotorManager {
     private:
         bool motor_interface_send_flag = false,
                 new_commands_flag = false,
@@ -46,8 +46,8 @@ class MotorInterface {
         
     public:
         //constuctor and destructor
-        MotorInterface();
-        ~MotorInterface();
+        MotorManager();
+        ~MotorManager();
 
         //operation
         MotorError initialize(std::map<unsigned int, motor::Motor> &motor_map, socketcan::SocketCan &socket_can);
@@ -67,6 +67,6 @@ class MotorInterface {
         void setMotorDataFlagToFalse(std::map<unsigned int, motor::Motor> &motor_map);
 };
 
-} //namespace motorInterface
+} //namespace motorManager
 
 #endif //MOTOR_INTERFACE_H

@@ -6,7 +6,7 @@ using namespace std::chrono_literals;
 
 namespace frameInterpreter {
 
-void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::map<unsigned int, motor::Motor> &motor_map, motorInterface::MotorInterface &motor_interface) {
+void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::map<unsigned int, motor::Motor> &motor_map, motorManager::MotorManager &motor_interface) {
     socketcan::SocketCanFrame recv_frame;
     can_frame message;
 
@@ -46,7 +46,7 @@ void ReceiveFrame(bool &stop, socketcan::SocketCan &socket_can, std::map<unsigne
     }
 }
 
-void SendFrame(bool &stop, socketcan::SocketCan &socket_can, motorInterface::MotorInterface &motor_interface, std::map<unsigned int, motor::Motor> &motor_map) {
+void SendFrame(bool &stop, socketcan::SocketCan &socket_can, motorManager::MotorManager &motor_interface, std::map<unsigned int, motor::Motor> &motor_map) {
     int send_cnt = -1;
     std::vector<can_frame> frame_vector;
 
@@ -86,7 +86,7 @@ void SendFrame(bool &stop, socketcan::SocketCan &socket_can, motorInterface::Mot
     }
 }
 
-void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std::map<unsigned int, motor::Motor> &motor_map) {
+void SendToRos(bool &stop, motorManager::MotorManager &motor_interface, std::map<unsigned int, motor::Motor> &motor_map) {
     while(!stop) {
         if(!motor_interface.getDataToRosFlag()) continue;
         //send to ROS
@@ -101,7 +101,7 @@ void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std:
     }
 }
 
-/* void TestRosInterface(motorInterface::MotorInterface &motor_interface, std::map<canid_t, motor::Motor> &motor_map) {
+/* void TestRosInterface(motorManager::MotorManager &motor_interface, std::map<canid_t, motor::Motor> &motor_map) {
     double cmd[2];
     auto d1 = 10ms;
     sleep(1);
@@ -111,7 +111,7 @@ void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std:
     cmd[0] = 2;
     cmd[1] = 1;
 
-    while(motor_interface.readFromInterface(cmd, motor_map) == motorInterface::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
+    while(motor_interface.readFromInterface(cmd, motor_map) == motorManager::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
         printf("WARNING: calculating last commands!\n");
         std::this_thread::sleep_for(d1);
     }
@@ -123,7 +123,7 @@ void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std:
     cmd[0] = 1;
     cmd[1] = 2;
 
-    while(motor_interface.readFromInterface(cmd, motor_map) == motorInterface::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
+    while(motor_interface.readFromInterface(cmd, motor_map) == motorManager::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
         printf("WARNING: calculating last commands!\n");
         std::this_thread::sleep_for(d1);
     }
@@ -135,7 +135,7 @@ void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std:
     cmd[0] = 2;
     cmd[1] = 2;
 
-    while(motor_interface.readFromInterface(cmd, motor_map) == motorInterface::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
+    while(motor_interface.readFromInterface(cmd, motor_map) == motorManager::MotorError::UNABLE_TO_GET_NEW_COMMANDS) {
         printf("WARNING: calculating last commands!\n");
         std::this_thread::sleep_for(d1);
     }
@@ -146,7 +146,7 @@ void SendToRos(bool &stop, motorInterface::MotorInterface &motor_interface, std:
 int main(int , char *[]) {
     socketcan::SocketCan socket_can;
     std::map<unsigned int, motor::Motor> motor_map;
-    motorInterface::MotorInterface motor_interface;
+    motorManager::MotorManager motor_interface;
 
     motor::Motor m1(0x141, "0");
     motor::Motor m2(0x142, "1");
@@ -161,7 +161,7 @@ int main(int , char *[]) {
 
     bool stop_all;
 
-    if(motor_interface.initialize(motor_map, socket_can) != motorInterface::MotorError::OK)
+    if(motor_interface.initialize(motor_map, socket_can) != motorManager::MotorError::OK)
         return -1;
 
     printf("Motors initialized.\n");

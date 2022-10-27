@@ -1,12 +1,12 @@
-#include <motorInterface.h>
+#include <motorManager.h>
 
-namespace motorInterface {
+namespace motorManager {
 
-    MotorInterface::MotorInterface() {}
+    MotorManager::MotorManager() {}
 
-    MotorInterface::~MotorInterface() {};
+    MotorManager::~MotorManager() {};
 
-    MotorError MotorInterface::initialize(std::map<unsigned int, motor::Motor> &motor_map, socketcan::SocketCan &socket_can) {
+    MotorError MotorManager::initialize(std::map<unsigned int, motor::Motor> &motor_map, socketcan::SocketCan &socket_can) {
         can_frame frame;
 
         frame.data[0] = 0x88;
@@ -37,7 +37,7 @@ namespace motorInterface {
         return MotorError::OK;
     }
 
-    MotorError MotorInterface::readFromInterface(double cmd[], std::map<canid_t, motor::Motor> &motor_map) {
+    MotorError MotorManager::readFromInterface(double cmd[], std::map<canid_t, motor::Motor> &motor_map) {
         //receive commands from ROS interface
         if(this->getNewCommandsFlag())
             return MotorError::UNABLE_TO_GET_NEW_COMMANDS;
@@ -54,7 +54,7 @@ namespace motorInterface {
         return MotorError::OK;
     }
 
-    std::vector<joint::Joint> MotorInterface::writeToInterface(std::map<canid_t, motor::Motor> motor_map) {
+    std::vector<joint::Joint> MotorManager::writeToInterface(std::map<canid_t, motor::Motor> motor_map) {
         //send motor current status to the ROS interface
         
         int size = (int) motor_map.size();
@@ -73,14 +73,14 @@ namespace motorInterface {
         return joints;
     }
 
-    void MotorInterface::produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map) {
+    void MotorManager::produceDouble(can_frame frame, std::map<unsigned int, motor::Motor> &motor_map) {
         //receiving frames from socketcan 
         if(motor_map.find(frame.can_id)->second.frameDataToDoubleConverter(frame.data)) {
             motor_map.find(frame.can_id)->second.setMotorDataUpdatedFlag(true);
         }
     }
 
-    void MotorInterface::produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map) {
+    void MotorManager::produceFrame(std::vector<can_frame> &frame_vector, std::map<canid_t, motor::Motor> &motor_map) {
         uint8_t frame_data[8] = {0};
         double cmd[motor_map.size()];
 
@@ -110,39 +110,39 @@ namespace motorInterface {
         }
     }
 
-    void MotorInterface::setDataToRosFlag(bool flag_state) {
+    void MotorManager::setDataToRosFlag(bool flag_state) {
         this->data_to_ros_flag = flag_state;
     }
 
-    bool MotorInterface::getDataToRosFlag() {
+    bool MotorManager::getDataToRosFlag() {
         return this->data_to_ros_flag;
     }
 
-    void MotorInterface::setSendFrameFlag(bool flag_state) {
+    void MotorManager::setSendFrameFlag(bool flag_state) {
         this->motor_interface_send_flag = flag_state;
     }
 
-    bool MotorInterface::getSendFrameFlag() {
+    bool MotorManager::getSendFrameFlag() {
         return this->motor_interface_send_flag;
     }
 
-    void MotorInterface::setNewCommandsFlag(bool flag_state) {
+    void MotorManager::setNewCommandsFlag(bool flag_state) {
         this->new_commands_flag = flag_state;
     }
 
-    bool MotorInterface::getNewCommandsFlag() {
+    bool MotorManager::getNewCommandsFlag() {
         return this->new_commands_flag;
     }
 
-    void MotorInterface::setDoubleResponse(double value, int n){
+    void MotorManager::setDoubleResponse(double value, int n){
         this->response[n] = value;
     }
 
-    double MotorInterface::getDoubleResponse(int n) {
+    double MotorManager::getDoubleResponse(int n) {
         return this->response[n];
     }
 
-    void MotorInterface::setMotorDataFlagToFalse(std::map<unsigned int, motor::Motor> &motor_map) {
+    void MotorManager::setMotorDataFlagToFalse(std::map<unsigned int, motor::Motor> &motor_map) {
         for(auto &it : motor_map)
             it.second.setMotorDataUpdatedFlag(false);
     }
