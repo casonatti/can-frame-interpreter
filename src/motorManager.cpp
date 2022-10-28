@@ -134,14 +134,6 @@ namespace motorManager {
         return this->new_commands_flag;
     }
 
-    void MotorManager::setDoubleResponse(double value, int n){
-        this->response[n] = value;
-    }
-
-    double MotorManager::getDoubleResponse(int n) {
-        return this->response[n];
-    }
-
     void MotorManager::setMotorDataFlagToFalse(std::map<unsigned int, motor::Motor> &motor_map) {
         for(auto &it : motor_map)
             it.second.setMotorDataUpdatedFlag(false);

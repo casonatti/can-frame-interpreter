@@ -42,7 +42,7 @@ class MotorManager {
                 new_commands_flag = false,
                 data_to_ros_flag = false;
 
-        double cmd[2], response[2];
+        std::map<canid_t, motor::Motor> motor_map;
         
     public:
         //constuctor and destructor
